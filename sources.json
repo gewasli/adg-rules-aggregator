@@ -12,22 +12,22 @@
     },
     {
       "name": "anti-AD",
-      "url": "https://cdn.jsdelivr.net/gh/privacy-protection-tools/anti-AD@master/anti-ad-adguard.txt",
+      "url": "https://anti-ad.net/adguard.txt",
       "format": "adblock"
     },
     {
       "name": "EasyPrivacy",
-      "url": "https://easylist-downloads.adblockplus.org/easyprivacy.txt",
+      "url": "https://ublockorigin.pages.dev/thirdparties/easyprivacy.txt",
       "format": "adblock"
     },
     {
       "name": "uBlock Ads",
-      "url": "https://cdn.jsdelivr.net/gh/uBlockOrigin/uAssets@master/filters/filters.txt",
+      "url": "https://ublockorigin.pages.dev/filters/filters.min.txt",
       "format": "adblock"
     },
     {
       "name": "uBlock Privacy",
-      "url": "https://cdn.jsdelivr.net/gh/uBlockOrigin/uAssets@master/filters/privacy.txt",
+      "url": "https://ublockorigin.github.io/uAssetsCDN/filters/privacy.min.txt",
       "format": "adblock"
     },
     {
@@ -37,28 +37,33 @@
     },
     {
       "name": "GOODBYEADS DNS",
-      "url": "https://raw.githubusercontent.com/8680/GOODBYEADS/master/data/rules/dns.txt",
+      "url": "https://ghfast.top/raw.githubusercontent.com/8680/GOODBYEADS/master/data/rules/dns.txt",
       "format": "adblock"
     },
     {
-      "name": "hagezi Multi Pro",
-      "url": "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@main/adblock/multi-pro.txt",
+      "name": "Ad-J 移动端去广告",
+      "url": "https://gcore.jsdelivr.net/gh/jk278/Ad-J/Ad-J.txt",
       "format": "adblock"
     },
     {
-      "name": "OISD Big",
-      "url": "https://dns.oisd.nl/abp",
-      "format": "adblock"
+      "name": "github hosts",
+      "url": "https://raw.hellogithub.com/hosts",
+      "format": "hosts"
     },
     {
-      "name": "AdGuard 中文过滤",
-      "url": "https://filters.adtidy.org/extension/chromium/filters/224.txt",
-      "format": "adblock"
+      "name": "onedrive hosts",
+      "url": "https://onedrive-hosts.learningman.top/",
+      "format": "hosts"
     },
     {
-      "name": "1Hosts Pro",
-      "url": "https://cdn.jsdelivr.net/gh/badmojr/1Hosts@master/Pro.abp",
-      "format": "adblock"
+      "name": "steam hosts",
+      "url": "https://raw.githubusercontent.com/Clov614/SteamHostSync/main/Hosts_steam",
+      "format": "hosts"
+    },
+    {
+      "name": "CheckTMDB",
+      "url": "https://raw.githubusercontent.com/cnwikee/CheckTMDB/refs/heads/main/Tmdb_host_ipv4",
+      "format": "hosts"
     }
   ],
   "custom_block_rules": [
