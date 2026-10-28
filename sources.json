@@ -1,5 +1,5 @@
 {
-  "sources": [
+  "block_sources": [
     {
       "name": "EasyList",
       "url": "https://easylist-downloads.adblockplus.org/easylist.txt",
@@ -39,31 +39,28 @@
       "name": "GOODBYEADS DNS",
       "url": "https://ghfast.top/raw.githubusercontent.com/8680/GOODBYEADS/master/data/rules/dns.txt",
       "format": "adblock"
-    },
+    }
+  ],
+  "hosts_sources": [
     {
       "name": "Ad-J 移动端去广告",
-      "url": "https://gcore.jsdelivr.net/gh/jk278/Ad-J/Ad-J.txt",
-      "format": "hosts"
+      "url": "https://gcore.jsdelivr.net/gh/jk278/Ad-J/Ad-J.txt"
     },
     {
-      "name": "github hosts",
-      "url": "https://raw.hellogithub.com/hosts",
-      "format": "hosts"
+      "name": "github 加速",
+      "url": "https://raw.hellogithub.com/hosts"
     },
     {
-      "name": "onedrive hosts",
-      "url": "https://onedrive-hosts.learningman.top/",
-      "format": "hosts"
+      "name": "onedrive 加速",
+      "url": "https://onedrive-hosts.learningman.top/"
     },
     {
-      "name": "steam hosts",
-      "url": "https://raw.githubusercontent.com/Clov614/SteamHostSync/main/Hosts_steam",
-      "format": "hosts"
+      "name": "steam 加速",
+      "url": "https://raw.githubusercontent.com/Clov614/SteamHostSync/main/Hosts_steam"
     },
     {
-      "name": "CheckTMDB",
-      "url": "https://raw.githubusercontent.com/cnwikee/CheckTMDB/refs/heads/main/Tmdb_host_ipv4",
-      "format": "hosts"
+      "name": "tmdb 加速",
+      "url": "https://raw.githubusercontent.com/cnwikee/CheckTMDB/refs/heads/main/Tmdb_host_ipv4"
     }
   ],
   "custom_block_rules": [

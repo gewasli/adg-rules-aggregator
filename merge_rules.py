@@ -1,30 +1,29 @@
 #!/usr/bin/env python3
 """
 AdGuard Home 规则聚合器
-每天自动拉取上游规则列表，合并去重后生成单一规则文件
+每天自动拉取上游规则列表，合并去重后生成两个文件：
+- rules.txt: 广告拦截规则 (AdGuard 格式)
+- hosts.txt: 加速 hosts 规则 (hosts 格式)
 """
 
 import json
 import os
 import re
-import sys
 import urllib.request
 import urllib.error
 from datetime import datetime, timezone
 
-# 配置
 CONFIG_FILE = "sources.json"
 OUTPUT_DIR = "dist"
-OUTPUT_FILE = os.path.join(OUTPUT_DIR, "rules.txt")
+BLOCK_OUTPUT = os.path.join(OUTPUT_DIR, "rules.txt")
+HOSTS_OUTPUT = os.path.join(OUTPUT_DIR, "hosts.txt")
 STATS_FILE = os.path.join(OUTPUT_DIR, "stats.json")
 
-# DNS 层面有效的规则正则
 DNS_RULE_PATTERN = re.compile(r'^(\|\|[^\/\*\^]+(\^(\$[^\s]+)?)?)$')
 WHITELIST_PATTERN = re.compile(r'^(@@\|\|[^\/\*\^]+(\^(\$[^\s]+)?)?)$')
 
 
 def download_rules(url, timeout=30):
-    """下载规则文件"""
     try:
         req = urllib.request.Request(url, headers={
             'User-Agent': 'Mozilla/5.0 (compatible; ADG-Rules-Aggregator/1.0)'
@@ -36,33 +35,9 @@ def download_rules(url, timeout=30):
         return None
 
 
-def extract_dns_rules(content, fmt='adblock'):
-    """从规则内容中提取 DNS 层面有效的规则"""
+def extract_block_rules(content):
+    """从 adblock 格式内容中提取拦截规则"""
     rules = set()
-    
-    if fmt == 'hosts':
-        # hosts 格式: 127.0.0.1 example.com 或 0.0.0.0 example.com
-        for line in content.splitlines():
-            line = line.strip()
-            if not line or line.startswith('#') or line.startswith('!'):
-                continue
-            # 去掉行尾注释
-            if '#' in line:
-                line = line[:line.index('#')].strip()
-            parts = line.split()
-            if len(parts) >= 2:
-                ip = parts[0]
-                domain = parts[1].lower()
-                # 跳过 localhost 等本地域名
-                if domain in ('localhost', 'localhost.localdomain', '0.0.0.0'):
-                    continue
-                if domain.startswith('local') or '.' not in domain:
-                    continue
-                # hosts 格式的广告列表，所有非本地域名都拦截
-                rules.add(f'||{domain}^')
-        return rules
-    
-    # adblock 格式
     for line in content.splitlines():
         line = line.strip()
         if not line or line.startswith('!') or line.startswith('['):
@@ -82,6 +57,30 @@ def extract_dns_rules(content, fmt='adblock'):
     return rules
 
 
+def extract_hosts_lines(content):
+    """从 hosts 格式内容中提取有效 hosts 行"""
+    lines = []
+    seen_domains = set()
+    for line in content.splitlines():
+        line = line.strip()
+        if not line or line.startswith('#') or line.startswith('!'):
+            continue
+        if '#' in line:
+            line = line[:line.index('#')].strip()
+        parts = line.split()
+        if len(parts) >= 2:
+            ip = parts[0]
+            domain = parts[1].lower()
+            if domain in ('localhost', 'localhost.localdomain'):
+                continue
+            if domain.startswith('local') or '.' not in domain:
+                continue
+            if domain not in seen_domains:
+                seen_domains.add(domain)
+                lines.append(f"{ip}\t{domain}")
+    return lines
+
+
 def main():
     print("=" * 60)
     print("AdGuard Home 规则聚合器")
@@ -93,47 +92,36 @@ def main():
 
     all_rules = set()
     all_whitelist = set()
-    source_stats = []
+    all_hosts = []
+    block_stats = []
+    hosts_stats = []
 
-    for source in config['sources']:
+    print("\n>>> 处理广告拦截源")
+    for source in config.get('block_sources', []):
         name = source['name']
         url = source['url']
-        print(f"\n[处理] {name}")
+        print(f"\n[拦截] {name}")
         print(f"  URL: {url}")
 
         content = download_rules(url)
         if content is None:
-            source_stats.append({
-                'name': name,
-                'url': url,
-                'status': 'failed',
-                'rules_count': 0
-            })
+            block_stats.append({'name': name, 'status': 'failed', 'rules_count': 0})
             continue
 
-        fmt = source.get('format', 'adblock')
-        # 调试：打印前 200 字符
-        preview = content[:200].replace('\n', '\\n')
-        print(f"  [DEBUG] 内容预览: {preview}")
-        rules = extract_dns_rules(content, fmt)
+        rules = extract_block_rules(content)
         dns_rules = {r for r in rules if not r.startswith('@@')}
         wl_rules = {r for r in rules if r.startswith('@@')}
 
         all_rules.update(dns_rules)
         all_whitelist.update(wl_rules)
 
-        print(f"  提取到 {len(dns_rules)} 条拦截规则, {len(wl_rules)} 条白名单规则")
-        source_stats.append({
-            'name': name,
-            'url': url,
-            'status': 'ok',
-            'rules_count': len(dns_rules)
-        })
+        print(f"  提取到 {len(dns_rules)} 条拦截规则, {len(wl_rules)} 条白名单")
+        block_stats.append({'name': name, 'status': 'ok', 'rules_count': len(dns_rules)})
 
     custom_rules = config.get('custom_block_rules', [])
     for cr in custom_rules:
         all_rules.add(cr)
-    print(f"\n[自定义规则] 添加了 {len(custom_rules)} 条自定义拦截规则")
+    print(f"\n[自定义拦截] 添加了 {len(custom_rules)} 条规则")
 
     for wl in config.get('whitelist_rules', []):
         all_whitelist.add(wl)
@@ -158,30 +146,57 @@ def main():
     final_rules = sorted(final_rules)
     all_whitelist = sorted(all_whitelist)
 
+    print("\n>>> 处理加速 hosts 源")
+    for source in config.get('hosts_sources', []):
+        name = source['name']
+        url = source['url']
+        print(f"\n[加速] {name}")
+        print(f"  URL: {url}")
+
+        content = download_rules(url)
+        if content is None:
+            hosts_stats.append({'name': name, 'status': 'failed', 'count': 0})
+            continue
+
+        lines = extract_hosts_lines(content)
+        all_hosts.extend(lines)
+        print(f"  提取到 {len(lines)} 条 hosts 规则")
+        hosts_stats.append({'name': name, 'status': 'ok', 'count': len(lines)})
+
+    all_hosts = list(dict.fromkeys(all_hosts))
+
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
-        f.write(f"! AdGuard Home 聚合规则列表\n")
+    with open(BLOCK_OUTPUT, 'w', encoding='utf-8') as f:
+        f.write(f"! AdGuard Home 广告拦截聚合规则\n")
         f.write(f"! 自动生成，请勿手动编辑\n")
         f.write(f"! 更新时间: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}\n")
         f.write(f"! 拦截规则: {len(final_rules)} 条\n")
         f.write(f"! 白名单规则: {len(all_whitelist)} 条\n")
-        f.write(f"! 上游源: {len(source_stats)} 个\n")
         f.write(f"! {'='*50}\n\n")
-
-        f.write(f"! ===== 白名单规则 =====\n")
+        f.write(f"! ===== 白名单 =====\n")
         for rule in all_whitelist:
             f.write(rule + '\n')
-
         f.write(f"\n! ===== 拦截规则 =====\n")
         for rule in final_rules:
             f.write(rule + '\n')
 
+    with open(HOSTS_OUTPUT, 'w', encoding='utf-8') as f:
+        f.write(f"# AdGuard Home 加速 hosts 聚合\n")
+        f.write(f"# 自动生成，请勿手动编辑\n")
+        f.write(f"# 更新时间: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}\n")
+        f.write(f"# hosts 规则: {len(all_hosts)} 条\n")
+        f.write(f"# {'='*50}\n\n")
+        for line in all_hosts:
+            f.write(line + '\n')
+
     stats = {
         'updated_at': datetime.now(timezone.utc).isoformat(),
-        'total_block_rules': len(final_rules),
-        'total_whitelist_rules': len(all_whitelist),
-        'sources': source_stats,
+        'block_rules': len(final_rules),
+        'whitelist_rules': len(all_whitelist),
+        'hosts_rules': len(all_hosts),
+        'block_sources': block_stats,
+        'hosts_sources': hosts_stats,
         'status': 'ok'
     }
     with open(STATS_FILE, 'w', encoding='utf-8') as f:
@@ -189,9 +204,8 @@ def main():
 
     print("\n" + "=" * 60)
     print(f"✅ 聚合完成!")
-    print(f"   拦截规则: {len(final_rules)} 条")
-    print(f"   白名单规则: {len(all_whitelist)} 条")
-    print(f"   输出文件: {OUTPUT_FILE}")
+    print(f"   广告拦截规则: {len(final_rules)} 条 -> {BLOCK_OUTPUT}")
+    print(f"   加速 hosts 规则: {len(all_hosts)} 条 -> {HOSTS_OUTPUT}")
     print("=" * 60)
 
 
