@@ -1,0 +1,86 @@
+{
+  "updated_at": "2026-10-28T11:16:18.208875+00:00",
+  "total_block_rules": 153014,
+  "total_whitelist_rules": 1634,
+  "sources": [
+    {
+      "name": "EasyList",
+      "url": "https://easylist-downloads.adblockplus.org/easylist.txt",
+      "status": "ok",
+      "rules_count": 46477
+    },
+    {
+      "name": "EasyList China",
+      "url": "https://easylist-downloads.adblockplus.org/easylistchina.txt",
+      "status": "ok",
+      "rules_count": 5923
+    },
+    {
+      "name": "anti-AD",
+      "url": "https://anti-ad.net/adguard.txt",
+      "status": "ok",
+      "rules_count": 104518
+    },
+    {
+      "name": "EasyPrivacy",
+      "url": "https://ublockorigin.pages.dev/thirdparties/easyprivacy.txt",
+      "status": "ok",
+      "rules_count": 47344
+    },
+    {
+      "name": "uBlock Ads",
+      "url": "https://ublockorigin.pages.dev/filters/filters.min.txt",
+      "status": "ok",
+      "rules_count": 1069
+    },
+    {
+      "name": "uBlock Privacy",
+      "url": "https://ublockorigin.github.io/uAssetsCDN/filters/privacy.min.txt",
+      "status": "ok",
+      "rules_count": 187
+    },
+    {
+      "name": "urlhaus 恶意软件",
+      "url": "https://malware-filter.gitlab.io/urlhaus-filter/urlhaus-filter-ag-online.txt",
+      "status": "ok",
+      "rules_count": 1993
+    },
+    {
+      "name": "GOODBYEADS DNS",
+      "url": "https://ghfast.top/raw.githubusercontent.com/8680/GOODBYEADS/master/data/rules/dns.txt",
+      "status": "ok",
+      "rules_count": 121768
+    },
+    {
+      "name": "Ad-J 移动端去广告",
+      "url": "https://gcore.jsdelivr.net/gh/jk278/Ad-J/Ad-J.txt",
+      "status": "ok",
+      "rules_count": 0
+    },
+    {
+      "name": "github hosts",
+      "url": "https://raw.hellogithub.com/hosts",
+      "status": "ok",
+      "rules_count": 40
+    },
+    {
+      "name": "onedrive hosts",
+      "url": "https://onedrive-hosts.learningman.top/",
+      "status": "ok",
+      "rules_count": 40
+    },
+    {
+      "name": "steam hosts",
+      "url": "https://raw.githubusercontent.com/Clov614/SteamHostSync/main/Hosts_steam",
+      "status": "ok",
+      "rules_count": 10
+    },
+    {
+      "name": "CheckTMDB",
+      "url": "https://raw.githubusercontent.com/cnwikee/CheckTMDB/refs/heads/main/Tmdb_host_ipv4",
+      "status": "ok",
+      "rules_count": 27
+    }
+  ],
+  "status": "ok"
+}
