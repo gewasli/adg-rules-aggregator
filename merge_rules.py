@@ -112,6 +112,9 @@ def main():
             continue
 
         fmt = source.get('format', 'adblock')
+        # 调试：打印前 200 字符
+        preview = content[:200].replace('\n', '\\n')
+        print(f"  [DEBUG] 内容预览: {preview}")
         rules = extract_dns_rules(content, fmt)
         dns_rules = {r for r in rules if not r.startswith('@@')}
         wl_rules = {r for r in rules if r.startswith('@@')}
