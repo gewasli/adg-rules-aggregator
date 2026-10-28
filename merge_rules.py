@@ -36,9 +36,33 @@ def download_rules(url, timeout=30):
         return None
 
 
-def extract_dns_rules(content):
+def extract_dns_rules(content, fmt='adblock'):
     """从规则内容中提取 DNS 层面有效的规则"""
     rules = set()
+    
+    if fmt == 'hosts':
+        # hosts 格式: 127.0.0.1 example.com 或 0.0.0.0 example.com
+        for line in content.splitlines():
+            line = line.strip()
+            if not line or line.startswith('#') or line.startswith('!'):
+                continue
+            # 去掉行尾注释
+            if '#' in line:
+                line = line[:line.index('#')].strip()
+            parts = line.split()
+            if len(parts) >= 2:
+                ip = parts[0]
+                domain = parts[1].lower()
+                # 跳过 localhost 等本地域名
+                if domain in ('localhost', 'localhost.localdomain', '0.0.0.0'):
+                    continue
+                if domain.startswith('local') or '.' not in domain:
+                    continue
+                # hosts 格式的广告列表，所有非本地域名都拦截
+                rules.add(f'||{domain}^')
+        return rules
+    
+    # adblock 格式
     for line in content.splitlines():
         line = line.strip()
         if not line or line.startswith('!') or line.startswith('['):
@@ -87,7 +111,8 @@ def main():
             })
             continue
 
-        rules = extract_dns_rules(content)
+        fmt = source.get('format', 'adblock')
+        rules = extract_dns_rules(content, fmt)
         dns_rules = {r for r in rules if not r.startswith('@@')}
         wl_rules = {r for r in rules if r.startswith('@@')}
 

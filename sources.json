@@ -43,7 +43,7 @@
     {
       "name": "Ad-J 移动端去广告",
       "url": "https://gcore.jsdelivr.net/gh/jk278/Ad-J/Ad-J.txt",
-      "format": "adblock"
+      "format": "hosts"
     },
     {
       "name": "github hosts",
