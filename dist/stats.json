@@ -1,85 +1,75 @@
 {
-  "updated_at": "2026-10-28T11:16:18.208875+00:00",
-  "total_block_rules": 153014,
-  "total_whitelist_rules": 1634,
-  "sources": [
+  "updated_at": "2026-10-29T04:33:19.542164+00:00",
+  "block_rules": 152908,
+  "whitelist_rules": 1634,
+  "hosts_rules": 117,
+  "block_sources": [
     {
       "name": "EasyList",
-      "url": "https://easylist-downloads.adblockplus.org/easylist.txt",
       "status": "ok",
-      "rules_count": 46477
+      "rules_count": 46714
     },
     {
       "name": "EasyList China",
-      "url": "https://easylist-downloads.adblockplus.org/easylistchina.txt",
       "status": "ok",
-      "rules_count": 5923
+      "rules_count": 5930
     },
     {
       "name": "anti-AD",
-      "url": "https://anti-ad.net/adguard.txt",
       "status": "ok",
-      "rules_count": 104518
+      "rules_count": 100013
     },
     {
       "name": "EasyPrivacy",
-      "url": "https://ublockorigin.pages.dev/thirdparties/easyprivacy.txt",
       "status": "ok",
-      "rules_count": 47344
+      "rules_count": 47349
     },
     {
       "name": "uBlock Ads",
-      "url": "https://ublockorigin.pages.dev/filters/filters.min.txt",
       "status": "ok",
-      "rules_count": 1069
+      "rules_count": 1070
     },
     {
       "name": "uBlock Privacy",
-      "url": "https://ublockorigin.github.io/uAssetsCDN/filters/privacy.min.txt",
       "status": "ok",
       "rules_count": 187
     },
     {
       "name": "urlhaus 恶意软件",
-      "url": "https://malware-filter.gitlab.io/urlhaus-filter/urlhaus-filter-ag-online.txt",
       "status": "ok",
-      "rules_count": 1993
+      "rules_count": 1766
     },
     {
       "name": "GOODBYEADS DNS",
-      "url": "https://ghfast.top/raw.githubusercontent.com/8680/GOODBYEADS/master/data/rules/dns.txt",
       "status": "ok",
       "rules_count": 121768
-    },
+    }
+  ],
+  "hosts_sources": [
     {
       "name": "Ad-J 移动端去广告",
-      "url": "https://gcore.jsdelivr.net/gh/jk278/Ad-J/Ad-J.txt",
       "status": "ok",
-      "rules_count": 0
+      "count": 0
     },
     {
-      "name": "github hosts",
-      "url": "https://raw.hellogithub.com/hosts",
+      "name": "github 加速",
       "status": "ok",
-      "rules_count": 40
+      "count": 40
     },
     {
-      "name": "onedrive hosts",
-      "url": "https://onedrive-hosts.learningman.top/",
+      "name": "onedrive 加速",
       "status": "ok",
-      "rules_count": 40
+      "count": 40
     },
     {
-      "name": "steam hosts",
-      "url": "https://raw.githubusercontent.com/Clov614/SteamHostSync/main/Hosts_steam",
+      "name": "steam 加速",
       "status": "ok",
-      "rules_count": 10
+      "count": 10
     },
     {
-      "name": "CheckTMDB",
-      "url": "https://raw.githubusercontent.com/cnwikee/CheckTMDB/refs/heads/main/Tmdb_host_ipv4",
+      "name": "tmdb 加速",
       "status": "ok",
-      "rules_count": 27
+      "count": 27
     }
   ],
   "status": "ok"
