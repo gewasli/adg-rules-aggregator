@@ -1,18 +1,18 @@
 {
-  "updated_at": "2026-11-09T04:49:45.433403+00:00",
-  "block_rules": 156478,
-  "whitelist_rules": 1638,
+  "updated_at": "2026-11-10T06:03:45.253344+00:00",
+  "block_rules": 156949,
+  "whitelist_rules": 1639,
   "hosts_rules": 117,
   "block_sources": [
     {
       "name": "EasyList",
       "status": "ok",
-      "rules_count": 47074
+      "rules_count": 47455
     },
     {
       "name": "EasyList China",
       "status": "ok",
-      "rules_count": 6047
+      "rules_count": 6062
     },
     {
       "name": "anti-AD",
@@ -22,22 +22,22 @@
     {
       "name": "EasyPrivacy",
       "status": "ok",
-      "rules_count": 47407
+      "rules_count": 47439
     },
     {
       "name": "uBlock Ads",
       "status": "ok",
-      "rules_count": 1084
+      "rules_count": 1082
     },
     {
       "name": "uBlock Privacy",
       "status": "ok",
-      "rules_count": 189
+      "rules_count": 190
     },
     {
       "name": "urlhaus 恶意软件",
       "status": "ok",
-      "rules_count": 1827
+      "rules_count": 1873
     },
     {
       "name": "GOODBYEADS DNS",
